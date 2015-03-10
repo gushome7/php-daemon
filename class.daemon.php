@@ -1,5 +1,7 @@
 <?php
-/*version 1.01 */
+/*version 1.02
+1.02 onLauncher puede devolver false, entonces no genera hijo. Util para controlar desde ese callback si debo hacer algo nuevo
+*/
 declare(ticks=1);
 require "class.pidfile.php";
 class Daemon{
@@ -43,7 +45,10 @@ class Daemon{
     }
 
     protected function launchJob($jobID){
-        $this->fire('onLauncher',array(&$this));
+        if(FALSE===$this->fire('onLauncher',array(&$this))) {
+                usleep(20000);
+                return false;
+        }
         $pid = pcntl_fork();
         if($pid == -1){
             $this->fire('onLaunchJobError',array(&$this));
