@@ -12,6 +12,7 @@ function childStart(&$daemon) {
         $dummy->setuniq();
         echo "Starting new child with: {$dummy->uniqid}\n";
         $daemon->childObject=$dummy;
+        return TRUE;
 }
 
 function childDying(&$daemon,$pid) {
